@@ -20,7 +20,7 @@ static void startMenu() {
     <<"\n"
     <<"10. Show all info"<<endl
     <<"11. Exit"<<endl
-    << "---------------- \n \n";
+    << "---------------- \n";
 }
 
 
