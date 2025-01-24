@@ -193,19 +193,50 @@ int main() {
 
                 cout << "Result added successfully!"<<endl;
                 resultMap[make_pair(studentID, testID)].display();
-
-
-
-
             }
 
 
             if (input == 8) {
+                cout<<"Please enter the Student ID for which you would like to edit a test result"<<endl;
+                int studentID = 0;
+                cin>>studentID;
+                if(studentMap.find(studentID) == studentMap.end()) {
+                    continue;
+                }
+                cout<<"Please enter the Test ID of which you would like to change the result"<<endl;
+                int testID = 0;
+                cin>>testID;
+                if(testMap.find(testID) == testMap.end()) {
+                    continue;
+                }
+                cout<<"Please enter the new grade of the test"<<endl;
+                int grade = 0;
+                cin>>grade;
+                resultMap[make_pair(studentID, testID)].grade = grade;
+                cout<<"The following has been saved:"<<endl;
+                resultMap[make_pair(studentID, testID)].display();
 
             }
 
 
             if (input == 9) {
+                cout<<"Please enter the Student ID of which you want to remove a test a result"<<endl;
+                int studentID = 0;
+                cin>>studentID;
+                if(studentMap.find(studentID) == studentMap.end()) {
+                    continue;
+
+                }
+                cout<<"Please enter the Test ID of the result you want to remove"<<endl;
+                int testID = 0;
+                cin>>testID;
+                if(testMap.find(testID) == testMap.end()) {
+                    continue;
+
+                }
+                cout<<"The following result has been removed:"<<endl;
+                resultMap[make_pair(studentID, testID)].display();
+                resultMap.erase(make_pair(studentID, testID));
 
             }
 
