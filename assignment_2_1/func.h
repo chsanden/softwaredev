@@ -1,13 +1,6 @@
-//
-// Created by thebe on 14/02/2025.
-//
-
 #ifndef FUNC_H
 #define FUNC_H
 #include "rapidcsv.h"
-#include <unordered_map>
-
-
 
 rapidcsv::Document customers("customers.csv");
 std::vector<int> custID = customers.GetColumn<int>("id");
