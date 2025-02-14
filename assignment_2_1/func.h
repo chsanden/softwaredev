@@ -86,36 +86,28 @@ public:
 
     void CustomerSpent()
     {
-        // 1) Sett totalSpent for hver kunde til 0
         for (int c = 0; c < custID.size(); c++) {
             totalSpent[c] = 0;
         }
 
-        // 2) Dobbel løkke: for hver kunde, se gjennom alle ordre
         for (int c = 0; c < custID.size(); c++)
         {
             for (int o = 0; o < orderID.size(); o++)
             {
-                // Sjekk om ordren 'o' tilhører kunde 'c'
                 if (orderCustID[o] == custID[c])
                 {
-                    // Finn produktet i ordren
                     int prodIdInOrder = orderProdID[o];
-
-                    // Let i prodID-lista for å finne riktig indeks p
                     for (int p = 0; p < prodID.size(); p++)
                     {
                         if (prodID[p] == prodIdInOrder)
                         {
                             totalSpent[c] += prodprice[p] * amount[o];
-                            break; // fant riktig produkt, gå videre
+                            break;
                         }
                     }
                 }
             }
         }
-
-        // 3) Skriv ut summen for hver kunde
         for (int c = 0; c < custID.size(); c++)
         {
             std::cout << custname[c] << " money spent: " << totalSpent[c] << std::endl;
