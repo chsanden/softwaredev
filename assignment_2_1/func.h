@@ -25,7 +25,8 @@ std::vector<int> orderID = orders.GetColumn<int>("id");
 std::vector<int> orderProdID = orders.GetColumn<int>("productid");
 std::vector<int> amount = orders.GetColumn<int>("amount");
 std::vector<int> orderCustID = orders.GetColumn<int>("customerid");
-std::vector<long> totalIncome(prodID.size(), 0);
+std::vector<int> totalIncome(prodID.size(), 0);
+std::vector<int> totalAmount(prodID.size(), 0);
 
 class Display {
 public:
@@ -40,11 +41,25 @@ public:
     }
 
     void Order() {
-        for (int i = 0; i < orderID.size(); i++) {
-            int tempprodID = orderProdID[i] - 1;
-            std::cout << prodname[tempprodID] << " amount: " << amount[i] << std::endl;
+    for (int i = 0; i < prodID.size(); i++)
+    {
+        totalAmount[i] = 0;
+    }
+    for (int i = 0; i < prodID.size(); i++)
+    {
+        for (int j = 0; j < orderID.size(); j++)
+        {
+            if (orderProdID[j] == prodID[i])
+            {
+                totalAmount[i] += amount[j];
+            }
         }
     }
+        for (int i = 0; i < prodID.size(); i++)
+    {
+        std::cout << prodname[i] << " amount: " << totalAmount[i] << std::endl;
+    }
+}
 
     void GrossIncome() {
         for (int i = 0; i < prodID.size(); i++)
