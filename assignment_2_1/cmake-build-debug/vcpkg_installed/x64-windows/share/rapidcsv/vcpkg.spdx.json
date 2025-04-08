@@ -1,0 +1,110 @@
+{
+  "$schema": "https://raw.githubusercontent.com/spdx/spdx-spec/v2.2.1/schemas/spdx-schema.json",
+  "spdxVersion": "SPDX-2.2",
+  "dataLicense": "CC0-1.0",
+  "SPDXID": "SPDXRef-DOCUMENT",
+  "documentNamespace": "https://spdx.org/spdxdocs/rapidcsv-x64-windows-8.84-1bfc2b89-ea75-44ec-b7d4-b912c78b1a4a",
+  "name": "rapidcsv:x64-windows@8.84 49c3ad677e6e62d1251c7e0016acf6a9fc0fb429adcda11983dcb6244edf34e3",
+  "creationInfo": {
+    "creators": [
+      "Tool: vcpkg-2025-02-11-bec4296bf5289dc9ce83b4f5095943e44162f9c2"
+    ],
+    "created": "2025-02-14T12:24:55Z"
+  },
+  "relationships": [
+    {
+      "spdxElementId": "SPDXRef-port",
+      "relationshipType": "GENERATES",
+      "relatedSpdxElement": "SPDXRef-binary"
+    },
+    {
+      "spdxElementId": "SPDXRef-port",
+      "relationshipType": "CONTAINS",
+      "relatedSpdxElement": "SPDXRef-file-0"
+    },
+    {
+      "spdxElementId": "SPDXRef-port",
+      "relationshipType": "CONTAINS",
+      "relatedSpdxElement": "SPDXRef-file-1"
+    },
+    {
+      "spdxElementId": "SPDXRef-binary",
+      "relationshipType": "GENERATED_FROM",
+      "relatedSpdxElement": "SPDXRef-port"
+    },
+    {
+      "spdxElementId": "SPDXRef-file-0",
+      "relationshipType": "CONTAINED_BY",
+      "relatedSpdxElement": "SPDXRef-port"
+    },
+    {
+      "spdxElementId": "SPDXRef-file-1",
+      "relationshipType": "CONTAINED_BY",
+      "relatedSpdxElement": "SPDXRef-port"
+    }
+  ],
+  "packages": [
+    {
+      "name": "rapidcsv",
+      "SPDXID": "SPDXRef-port",
+      "versionInfo": "8.84",
+      "downloadLocation": "git+https://github.com/Microsoft/vcpkg@62b6074da263ca7864da9eb1e26d0ed4b9e00412",
+      "homepage": "https://github.com/d99kris/rapidcsv/",
+      "licenseConcluded": "BSD-3-Clause",
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "description": "Rapidcsv is a C++ header-only library for CSV parsing.",
+      "comment": "This is the port (recipe) consumed by vcpkg."
+    },
+    {
+      "name": "rapidcsv:x64-windows",
+      "SPDXID": "SPDXRef-binary",
+      "versionInfo": "49c3ad677e6e62d1251c7e0016acf6a9fc0fb429adcda11983dcb6244edf34e3",
+      "downloadLocation": "NONE",
+      "licenseConcluded": "BSD-3-Clause",
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "comment": "This is a binary package built by vcpkg."
+    },
+    {
+      "SPDXID": "SPDXRef-resource-0",
+      "name": "d99kris/rapidcsv",
+      "downloadLocation": "git+https://github.com/d99kris/rapidcsv@v8.84",
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "checksums": [
+        {
+          "algorithm": "SHA512",
+          "checksumValue": "8fb03ad7e3b53f01c568deb7705a7185a66cfc1eb0245b0165d580a8f60a8972197cd5eac3cda115d9bbb3c06c89de25a84acad62d13d6ffb366d3f1155a1b9c"
+        }
+      ]
+    }
+  ],
+  "files": [
+    {
+      "fileName": "./C:/Users/thebe/.vcpkg-clion/vcpkg/buildtrees/versioning_/versions/rapidcsv/62b6074da263ca7864da9eb1e26d0ed4b9e00412/portfile.cmake",
+      "SPDXID": "SPDXRef-file-0",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "5ac49bd0685a959620d96853dc8da9c844383eee77ee66644fa5707cdf806af2"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./C:/Users/thebe/.vcpkg-clion/vcpkg/buildtrees/versioning_/versions/rapidcsv/62b6074da263ca7864da9eb1e26d0ed4b9e00412/vcpkg.json",
+      "SPDXID": "SPDXRef-file-1",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "01d4ee88fed5561d0bebfbae9f84573c58e3833c67b30c563a37bcfb06e4c517"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "copyrightText": "NOASSERTION"
+    }
+  ]
+}

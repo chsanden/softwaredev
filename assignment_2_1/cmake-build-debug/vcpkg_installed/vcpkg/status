@@ -1,0 +1,16 @@
+Package: vcpkg-cmake
+Version: 2024-04-23
+Architecture: x64-windows
+Multi-Arch: same
+Abi: 731729f1104765518e312f314394a5aa37a9bca31838d44bb7d79e758b0a1849
+Status: install ok installed
+
+Package: rapidcsv
+Version: 8.84
+Depends: vcpkg-cmake
+Architecture: x64-windows
+Multi-Arch: same
+Abi: 49c3ad677e6e62d1251c7e0016acf6a9fc0fb429adcda11983dcb6244edf34e3
+Description: Rapidcsv is a C++ header-only library for CSV parsing.
+Status: install ok installed
+

@@ -1,0 +1,9 @@
+{
+  "name" : "assignment-2-1",
+  "version-string" : "1.0.0",
+  "builtin-baseline" : "a29711cc86340a43c054cd37b8bd2871332a01e9",
+  "dependencies" : [ {
+    "name" : "rapidcsv",
+    "version>=" : "8.84"
+  } ]
+}

@@ -1,0 +1,9 @@
+Detecting compiler hash for triplet x64-windows...
+Compiler found: C:/Program Files (x86)/Microsoft Visual Studio/2019/BuildTools/VC/Tools/MSVC/14.29.30133/bin/Hostx64/x64/cl.exe
+All requested packages are currently installed.
+Total install time: 1.15 ms
+rapidcsv is header-only and can be used from CMake via:
+
+  find_path(RAPIDCSV_INCLUDE_DIRS "rapidcsv.h")
+  target_include_directories(main PRIVATE ${RAPIDCSV_INCLUDE_DIRS})
+
