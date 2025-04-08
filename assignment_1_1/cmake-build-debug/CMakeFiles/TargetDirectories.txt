@@ -1,0 +1,3 @@
+C:/Users/thebe/ikt103g25v/assignments/solutions/assignment_1_1/cmake-build-debug/CMakeFiles/assignment_1_1.dir
+C:/Users/thebe/ikt103g25v/assignments/solutions/assignment_1_1/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/thebe/ikt103g25v/assignments/solutions/assignment_1_1/cmake-build-debug/CMakeFiles/rebuild_cache.dir
