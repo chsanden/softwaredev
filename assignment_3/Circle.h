@@ -26,7 +26,7 @@ private:
     void resetCircle();
 
     //Variables
-    float speed = 5.0f;
+    float speed = 4.0f;
     float rad;
     float nx = 0;
     float ny = 0;

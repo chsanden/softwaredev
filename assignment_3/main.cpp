@@ -17,8 +17,10 @@ int main()
     sf::RenderWindow window(sf::VideoMode({size.width, size.height}), "Pong");
     window.setVerticalSyncEnabled(true);
 
-    sf::RectangleShape Paddle;
-    Paddle.setSize(sf::Vector2f(size.paddleSizeX, size.paddleSizeY));
+    sf::RectangleShape paddleShape;
+    paddleShape.setSize(sf::Vector2f(static_cast<float>(size.paddleSizeX), static_cast<float>(size.paddleSizeY)));
+    sf::CircleShape ballShape;
+    ballShape.setRadius(15.0f);
 
     sf::Font font;
     if (!font.openFromFile("arial.ttf"))
@@ -27,10 +29,11 @@ int main()
         EXIT_FAILURE;
     }
     sf::Text gameOver(font, "", 30);
+    sf::Text lScoreText(font, "", 22);
+    sf::Text rScoreText(font, "", 22);
     gameOver.setFillColor(sf::Color::White);
-
-    sf::RectangleShape paddleShape;
-    sf::CircleShape ballShape;
+    lScoreText.setFillColor(sf::Color::White);
+    rScoreText.setFillColor(sf::Color::White);
 
     Rectangle rightPaddle(size.rightPadPosX, size.paddleStartY, paddleShape, size, window);
     Rectangle leftPaddle(size.leftPadPosX, size.paddleStartY, paddleShape, size, window);
@@ -57,9 +60,15 @@ int main()
         if (rScore >= 5 || lScore >= 5)
         {
             gameOver.setString(rScore > lScore ? "AI wins!" : "Left player wins!");
+            lScoreText.setString(std::to_string(lScore));
+            rScoreText.setString(std::to_string(rScore));
             gameOver.setPosition(sf::Vector2f(size.midX - 80, size.midY - 80));
+            lScoreText.setPosition(sf::Vector2f(50, 50));
+            rScoreText.setPosition(sf::Vector2f(size.width - 50, 50));
             window.clear(sf::Color::Black);
             window.draw(gameOver);
+            window.draw(lScoreText);
+            window.draw(rScoreText);
             window.display();
             break;
         }
@@ -105,6 +114,7 @@ int main()
         ball.draw(window);
         window.display();
     }
+
     while(const auto event = window.pollEvent())
     {
         if(event->is<sf::Event::Closed>() ||

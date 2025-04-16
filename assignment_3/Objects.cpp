@@ -15,9 +15,9 @@ Rectangle::Rectangle(const float xPos, const float yPos, sf::RectangleShape name
     :
     Object(xPos, yPos), name(name), window(window), size(size)
 {
-    name.setSize(sf::Vector2f(temp.paddleSizeX, temp.paddleSizeY));
-    name.setFillColor(sf::Color::White);
-    name.setPosition(sf::Vector2f(xPos, yPos));
+    this->name.setSize(sf::Vector2f(temp.paddleSizeX, temp.paddleSizeY));
+    this->name.setFillColor(sf::Color::White);
+    this->name.setPosition(sf::Vector2f(xPos, yPos));
 }
 int Rectangle::draw(const float x, const float y)
 {
@@ -92,9 +92,9 @@ Circle::Circle(float rad, float xPos, float yPos, sf::CircleShape name, Size &si
     :
     Object(xPos, yPos), rad(rad), name(name), window(window), size(size)
 {
-    name.setRadius(rad);
-    name.setFillColor(sf::Color::White);
-    name.setPosition(sf::Vector2f(xPos, yPos));
+    this->name.setRadius(rad);
+    this->name.setFillColor(sf::Color::White);
+    this->name.setPosition(sf::Vector2f(xPos, yPos));
 }
 
 int Circle::draw(const float x, const float y)
