@@ -2,6 +2,8 @@
 #define RECTANGLE_H
 #include "Size.h"
 #include <SFML/Graphics.hpp>
+
+#include "Circle.h"
 #include "Objects.h"
 
 class Rectangle : public Object {
@@ -13,10 +15,11 @@ public:
     int draw(float x, float y);
     int draw(sf::RenderWindow &window) override;
     int move(float coefficient) override;
+    void aiMove(float coefficient, const Circle &ball);
 
 private:
     //Constant
-    const float ySpeed = 400.0f;
+    const float ySpeed = 4.0f;
 
     //Dependencies
     sf::RectangleShape name;

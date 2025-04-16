@@ -3,7 +3,11 @@
 #include "Circle.h"
 #include <SFML/Graphics.hpp>
 #include <random>
+#include <thread>
 
+#include "Size.h"
+
+Size temp(800, 400);
 
 
 Rectangle::Rectangle(const float xPos, const float yPos, sf::RectangleShape name, Size& size,
@@ -11,7 +15,7 @@ Rectangle::Rectangle(const float xPos, const float yPos, sf::RectangleShape name
     :
     Object(xPos, yPos), name(name), window(window), size(size)
 {
-    name.setSize(sf::Vector2f(xPos, yPos));
+    name.setSize(sf::Vector2f(temp.paddleSizeX, temp.paddleSizeY));
     name.setFillColor(sf::Color::White);
     name.setPosition(sf::Vector2f(xPos, yPos));
 }
@@ -27,6 +31,32 @@ int Rectangle::draw(sf::RenderWindow &window) {
     return draw(xPos, yPos);
 }
 
+void Rectangle::aiMove(const float coefficient, const Circle &ball)
+{
+    float deltaY = 0.0f;
+
+    if (ball.yPos > yPos)
+    {
+        deltaY += ySpeed * coefficient;
+    }
+    if (ball.yPos < yPos)
+    {
+        deltaY -= ySpeed * coefficient;
+    }
+    //Boundary checks
+    const sf::Vector2f rectSize = name.getSize();
+    if(yPos + deltaY < 0)
+    {
+        deltaY = -yPos;
+    }
+    if(yPos + deltaY > static_cast<float>(size.height) - rectSize.y)
+    {
+        deltaY = static_cast<float>(size.height) - rectSize.y - yPos;
+    }
+    //Update and draw position
+    yPos += deltaY;
+    draw(xPos, yPos);
+}
 
 int Rectangle::move(const float coefficient)
 {
@@ -41,7 +71,7 @@ int Rectangle::move(const float coefficient)
         deltaY += ySpeed * coefficient;
     }
 
-    //Boundary checks
+    //Boundary checks -- copy from aiMove
     const sf::Vector2f rectSize = name.getSize();
     if(yPos + deltaY < 0)
     {
@@ -52,7 +82,7 @@ int Rectangle::move(const float coefficient)
         deltaY = static_cast<float>(size.height) - rectSize.y - yPos;
     }
 
-    //Update and draw position
+    //Update and draw position -- copy from asiMove
     yPos += deltaY;
     draw(xPos, yPos);
     return 4;
@@ -74,76 +104,71 @@ int Circle::draw(const float x, const float y)
     return 2;
 }
 
-int Circle::move(float coefficient)
-{
-    if(!isMoving && (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up)
-        || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down)))
-    {
-        isMoving = true;
-        //Random initial direction
-        std::random_device rd;
-        std::mt19937 rand(rd());
-        std::uniform_int_distribution vec(0, 1);
-        int start = (vec(rand) == 0) ? 1 : -1;
-        nx = static_cast<float>(start) * speed;
-        ny = static_cast<float>(start) * speed;
-        return 6;
-    }
-
-    if(isMoving)
-    {
-        xPos += nx * coefficient;
-        yPos += ny * coefficient;
-
-        const float diam = 2 * rad;
-
-        //Roof and floor collisions
-        if(xPos < rad || xPos + rad > static_cast<float>(size.width))
-        {
-            yPos = 0;
-            ny = -ny;
-            return 5;
-        }
-        if (yPos < rad || yPos > static_cast<float>(size.height) - rad)
-        {
-            yPos = static_cast<float>(size.height) - diam;
-            ny = -ny;
-            return 5;
-        }
-
-        //Collisions with right and left "walls" --> scoring
-        if(xPos < rad || xPos + rad > static_cast<float>(size.width))
-        {
-            //Left player scores
-            if(xPos < rad)
-            {
-                resetCircle();
-                return -1;
-            }
-            //Right player scores
-            if(xPos > static_cast<float>(size.width) - rad)
-            {
-                resetCircle();
-                return 1;
-            }
-
-            //Resetting movement flag and variables
-            isMoving = false;
-            nx = 0;
-            ny = 0;
-            return 7;
-        }
-        return 4;
-    }
-    draw(xPos, yPos);
-    return 3;
-}
-
 int Circle::draw(sf::RenderWindow &window) {
     // Call your own draw function using the current position.
     return draw(xPos, yPos);
 }
 
+int Circle::move(float coefficient)
+{
+    if(!isMoving)
+    {
+        isMoving = true;
+        //Random initial direction
+        std::random_device rd;
+        std::mt19937 rand(rd());
+        std::uniform_real_distribution<float> angleDistribution(-45.0f, 45.0f);
+        std::uniform_int_distribution<int> directionDistribution(0, 1);
+
+        const float angle = angleDistribution(rand) * 3.14159f / 180.0f;
+        const float direction = directionDistribution(rand) == 0 ? -1.0f : 1.0f;
+
+        constexpr float minXSpeed = 4.0f;
+        nx = direction * speed * std::cos(angle);
+        nx = (std::abs(nx) < minXSpeed) ? minXSpeed * direction : nx;
+        ny = speed * std::sin(angle);
+        return 6;
+    }
+
+
+    xPos += nx * coefficient;
+    yPos += ny * coefficient;
+
+    const float diam = 2 * rad;
+
+    //Roof and floor collisions
+    if (yPos + diam < 0)
+    {
+        yPos = 0;
+        ny = -ny;
+        coefficient += (coefficient * 10)/100;
+        return 5;
+    }
+    if (yPos + diam > static_cast<float>(size.height))
+    {
+        yPos = static_cast<float>(size.height) - diam;
+        ny = -ny;
+        coefficient += (coefficient * 10)/100;
+        return 5;
+    }
+
+    //Collisions with right and left "walls" --> scoring
+    if (xPos + diam < 0)
+    {
+        resetCircle();
+        return -1;
+    }
+
+    // Right side (scoring for left player)
+    if (xPos > static_cast<float>(size.width))
+    {
+        resetCircle();
+        return 1;
+    }
+
+    draw(xPos, yPos);
+    return 7;
+}
 
 void Circle::resetCircle()
 {
@@ -153,8 +178,41 @@ void Circle::resetCircle()
     isMoving = false;
     nx = 0;
     ny = 0;
+    speed = 4.0f;
 }
 
+int Circle::getRad() const
+{
+    return rad;
+}
 
+float Circle::getNX() const
+{
+    return nx;
+}
 
+float Circle::getNY() const
+{
+    return ny;
+}
 
+float Circle::setNX(float nx)
+{
+    return this->nx = nx;
+}
+
+float Circle::setNY(float ny)
+{
+    return this->ny = ny;
+}
+
+float Circle::getSpeed() const
+{
+    return speed;
+}
+
+float Circle::speedIncr()
+{
+    this->speed += 0.25f;
+    return this->speed;
+}
