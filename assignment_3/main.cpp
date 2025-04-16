@@ -1,13 +1,13 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
+#include "Size.h"
 
-unsigned xWindow = 800;
-unsigned yWindow = 600;
 
+Size size;
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode({xWindow, yWindow}), "Pong");
+    sf::RenderWindow window(sf::VideoMode(({size.width, size.height}), "Pong");
     window.setVerticalSyncEnabled(true);
 
     sf::CircleShape ball(20.0f);
@@ -16,7 +16,7 @@ int main()
     sf::RectangleShape rightPaddle(sf::Vector2f(20.0f, 60.0f));
     sf::RectangleShape leftPaddle(sf::Vector2f(20.0f, 60.0f));
 
-    
+
 
 
     while (window.isOpen())
@@ -29,7 +29,10 @@ int main()
             }
         }
         window.clear();
-
+        window.draw(ball);
+        window.draw(leftPaddle);
+        window.draw(rightPaddle);
+        window.display();
         }
 
 
