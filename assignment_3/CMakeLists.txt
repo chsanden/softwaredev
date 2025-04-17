@@ -5,7 +5,7 @@ IF (WIN32)
     add_compile_definitions(SFML_STATIC)
 ENDIF ()
 
-project(sfml_input)
+project(assignment_3)
 
 set(CMAKE_CXX_STANDARD 20)
 
