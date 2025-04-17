@@ -1,87 +1,82 @@
 #include <iostream>
-#include <optional>
-#include <thread>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
+#include <SFML/Audio.hpp>
 #include "Circle.h"
 #include "Rectangle.h"
 #include "Size.h"
+#include <string>
+
+Size size(800, 600);
+
 int rScore = 0;
 int lScore = 0;
-
+constexpr int WIN_SCORE = 5;
 
 int main()
 {
+    //Window setup
     Size size(800, 600);
-
     sf::RenderWindow window(sf::VideoMode({size.width, size.height}), "Pong");
     window.setVerticalSyncEnabled(true);
 
+    // Shapes
     sf::RectangleShape paddleShape;
-    paddleShape.setSize(sf::Vector2f(static_cast<float>(size.paddleSizeX), static_cast<float>(size.paddleSizeY)));
-    sf::CircleShape ballShape;
-    ballShape.setRadius(15.0f);
+    paddleShape.setSize({static_cast<float>(size.paddleSizeX), static_cast<float>(size.paddleSizeY)});
+    sf::CircleShape ballShape(15.f);
 
+    // Font and texts
     sf::Font font;
     if (!font.openFromFile("arial.ttf"))
     {
         std::cerr << "Could not load font" << std::endl;
-        EXIT_FAILURE;
+        return EXIT_FAILURE;
     }
-    sf::Text gameOver(font, "", 30);
-    sf::Text lScoreText(font, "", 22);
-    sf::Text rScoreText(font, "", 22);
-    gameOver.setFillColor(sf::Color::White);
+
+    //Initialising text
+    sf::Text gameOverText(font, "", 48);
+    sf::Text lScoreText(font, "0", 24);
+    sf::Text rScoreText(font, "0", 24);
+    gameOverText.setFillColor(sf::Color::White);
     lScoreText.setFillColor(sf::Color::White);
     rScoreText.setFillColor(sf::Color::White);
+    gameOverText.setPosition(sf::Vector2f(size.midX - 80, size.midY - 80));
+    lScoreText.setPosition(sf::Vector2f(50, 50));
+    rScoreText.setPosition(sf::Vector2f(size.width - 50, 50));
+
+
 
     Rectangle rightPaddle(size.rightPadPosX, size.paddleStartY, paddleShape, size, window);
     Rectangle leftPaddle(size.leftPadPosX, size.paddleStartY, paddleShape, size, window);
     Circle ball(15.0f, size.midX, size.midY, ballShape, size, window);
 
+    //Hit sound config
+    sf::SoundBuffer buffer("oof.mp3");
+    sf::Sound oof(buffer);
+    oof.setVolume(75);
+
+    //Main game loop
     while (window.isOpen())
     {
         //If "X" clicked or Esc is pressed --> exit
-        while(const auto event = window.pollEvent())
-        {
-            if(event->is<sf::Event::Closed>() ||
+        while (auto optEvt = window.pollEvent()) {
+            auto& evt = *optEvt;
+            if (evt.is<sf::Event::Closed>() ||
                 sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape))
             {
                 window.close();
             }
         }
 
-        //Calling ball.move and returning code if scored
-        int moveResult = ball.move(0.5);
-        if (moveResult == -1)rScore++;
-        else if (moveResult == 1)lScore++;
 
-        //Game over loop
-        if (rScore >= 5 || lScore >= 5)
-        {
-            gameOver.setString(rScore > lScore ? "AI wins!" : "Left player wins!");
-            lScoreText.setString(std::to_string(lScore));
-            rScoreText.setString(std::to_string(rScore));
-            gameOver.setPosition(sf::Vector2f(size.midX - 80, size.midY - 80));
-            lScoreText.setPosition(sf::Vector2f(50, 50));
-            rScoreText.setPosition(sf::Vector2f(size.width - 50, 50));
-            window.clear(sf::Color::Black);
-            window.draw(gameOver);
-            window.draw(lScoreText);
-            window.draw(rScoreText);
-            window.display();
-            break;
-        }
-
-
-
+        //Player input
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up) ||
             sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down))
         {
             leftPaddle.move(1.0f);
         }
-        ball.move(0.5);
-        rightPaddle.aiMove(0.09f, ball);
+        rightPaddle.aiMove(0.9f, ball);
+        bool hit = false;
 
         //Right paddle collision
         if (ball.xPos + ball.getRad() * 2 >= rightPaddle.xPos &&
@@ -89,10 +84,12 @@ int main()
             ball.yPos + ball.getRad() * 2 >= rightPaddle.yPos &&
             ball.yPos <= rightPaddle.yPos + size.paddleSizeY)
         {
-            ball.setNX(-ball.getNX()); // Reverse X direction
+            // Reverse direction
+            ball.setNX(-ball.getNX());
             float newSpeed = ball.speedIncr();
             ball.setNX(ball.getNX() > 0 ? newSpeed : -newSpeed);
             ball.setNY(ball.getNY() > 0 ? newSpeed : -newSpeed);
+            hit = true;
         }
 
         //Left paddle collision
@@ -101,27 +98,67 @@ int main()
             ball.yPos + ball.getRad() * 2 >= leftPaddle.yPos &&
             ball.yPos <= leftPaddle.yPos + size.paddleSizeY)
         {
-            ball.setNX(-ball.getNX()); // Reverse X direction
+            ball.setNX(-ball.getNX());
             float newSpeed = ball.speedIncr();
             ball.setNX(ball.getNX() > 0 ? newSpeed : -newSpeed);
             ball.setNY(ball.getNY() > 0 ? newSpeed : -newSpeed);
+            hit = true;
         }
 
+        while (hit)
+        {
+            oof.play();
+            hit = false;
+        }
+
+        // Update game state
+        int result = ball.move(0.5f);
+        if (result == -1) rScore++;
+        else if (result == 1) lScore++;
+
         //Draw everything
+        lScoreText.setString(std::to_string(lScore));
+        rScoreText.setString(std::to_string(rScore));
         window.clear(sf::Color::Black);
+        window.draw(lScoreText);
+        window.draw(rScoreText);
         rightPaddle.draw(window);
         leftPaddle.draw(window);
         ball.draw(window);
         window.display();
-    }
 
-    while(const auto event = window.pollEvent())
-    {
-        if(event->is<sf::Event::Closed>() ||
-            sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape))
-        {
-            window.close();
-        }
+        if (rScore >= WIN_SCORE || lScore >= WIN_SCORE)break;
     }
+    //Game over loop
+    gameOverText.setString(rScore > lScore ? "AI wins!" : "Left player wins!");
+    gameOverText.setPosition(sf::Vector2f(size.midX - 150, size.midY - 80));
+    //Initialising win sound
+    sf::SoundBuffer winBuff("win.mp3");
+    sf::Sound win(winBuff);
+    win.setVolume(75);
+    win.play();
+
+
+    while (window.isOpen())
+    {
+        while (auto optEvt2 = window.pollEvent())
+        {
+            auto&evt2 = *optEvt2;
+            if (evt2.is<sf::Event::Closed>() ||
+                sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape))
+            {
+                window.close();
+            }
+        }
+        window.clear(sf::Color::Black);
+        window.draw(gameOverText);
+        window.draw(lScoreText);
+        window.draw(rScoreText);
+        window.display();
+    }
+    return 0;
 }
+
+
+
 
