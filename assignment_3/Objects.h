@@ -1,53 +1,41 @@
 #ifndef OBJECTS_H
 #define OBJECTS_H
 #include <SFML/Graphics.hpp>
-#include "Size.h"
 
 
-class Rectangle {
+//Return codes:\
+-1 --- Right side player scored\
+0 ---- Program exit\
+1 ---- Left side player scored\
+2 ---- Shape draw function ran\
+3 ---- Shape move function ran\
+4 ---- Position updated\
+5 ---- Collision\
+6 ---- Started\
+7 ---- Score updated
+
+
+class Object {
     public:
-    //Definition
-    Rectangle(float x, float y, sf::RectangleShape& name, Size& size, sf::RenderWindow& window);
+    virtual ~Object() = default;
 
-    //Functions
-    void draw(float x, float y);
-    void move(float coefficient);
+    Object(const float xPos, const float yPos) : xPos(xPos), yPos(yPos) {}
 
-    private:
-    //Variables
-    const float speed = 400;
-    float x;
-    float y;
+    Object()
+    {
+        xPos = yPos =  0;
+    }
 
-    //Dependencies
-    sf::RectangleShape name;
-    sf::RenderWindow& window;
-    Size& size;
+    float xPos, yPos;
+
+    virtual int draw(sf::RenderWindow &window) = 0;
+    virtual int move(float coefficient) = 0;
 };
 
-class Ball {
-    public:
-    //Definition
-    Ball(float rad, sf::CircleShape& name, Size &size, sf::RenderWindow &window);
 
-    //Functions
-    void draw(float x, float y);
-    void move(float coefficient);
 
-private:
-    //Variables
-    const float speed = 400;
-    float rad;
-    float x = static_cast<float>(size.width) / 2;
-    float y = static_cast<float>(size.height) / 2;
-    float nx = 0;
-    float ny = 0;
-    bool isMoving = false;
 
-    //Dependencies
-    sf::CircleShape name;
-    sf::RenderWindow& window;
-    Size& size;
-};
+
+
 
 #endif //OBJECTS_H
