@@ -1,27 +1,37 @@
 #include <iostream>
 #include <SQLiteCpp/SQLiteCpp.h>
 #include <sqlite3.h>
+#include "menus/menu.h"
+#include "utils/utils.h"
 
 int main()
 {
-    const SQLite::Database db("school.sqlite", SQLite::OPEN_READONLY);
-    SQLite::Statement queryAll(db, "SELECT * FROM students");
+    SQLite::Database db("school.sqlite", SQLite::OPEN_READWRITE);
+    bool exit = false;
 
-    while (queryAll.tryExecuteStep() == SQLITE_ROW)
+
+    while (!exit)
     {
-        int id = queryAll.getColumn("id");
-        std::string name = queryAll.getColumn("student_name");
-        std::string email = queryAll.getColumn("student_email");
-        int year = queryAll.getColumn("student_year");
-        std::cout  << "id: " << id << ", name: " << name << ", email: " << email << ", year: "<< year << std::endl;
-        if (queryAll.isDone())
+        menuPrint();
+        int choice;
+        if (!(std::cin >> choice))
         {
-            std::cout << "No more students in the database" << std::endl;
+            std::cin.clear();
+            std::cout << "Invalid input, try again" << std::endl;
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            continue;
+        }
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        switch (choice)
+        {
+            case 1: readAll(db); break;
+            case 2: getStudent(db); break;
+            case 3: addStudent(db); break;
+            case 4: editStudent(db); break;
+            case 5: deleteStudent(db); break;
+            case 6: searchStudent(db); break;
+            case 7: menuExit(exit); break;
+            default: std::cout << "Invalid input" << std::endl; break;
         }
     }
-    if (queryAll.tryExecuteStep() != SQLITE_ROW)
-    {
-        std::cout << "No students found" << std::endl;
-    }
-
 }

@@ -11,6 +11,11 @@ project(assignment_4_1)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(assignment_4_1 main.cpp)
+add_executable(assignment_4_1 main.cpp
+        utils/utils.h
+        utils/utils.cpp
+        menus/menu.cpp
+        menus/menu.h
+)
 find_package(SQLiteCpp CONFIG REQUIRED)
 target_link_libraries(assignment_4_1 PRIVATE SQLiteCpp)
