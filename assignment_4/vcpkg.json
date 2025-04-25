@@ -1,0 +1,18 @@
+{
+  "name" : "assignment-4-1",
+  "version-string" : "1.0.0",
+  "builtin-baseline" : "711466ff1cfc1239e93bf8010503eb161671be4b",
+  "dependencies" : [ {
+    "name" : "vcpkg-cmake-config",
+    "version>=" : "2024-05-23"
+  }, {
+    "name" : "vcpkg-cmake",
+    "version>=" : "2024-04-23"
+  }, {
+    "name" : "sqlitecpp",
+    "version>=" : "3.3.2"
+  }, {
+    "name" : "sqlite3",
+    "version>=" : "3.49.1"
+  } ]
+}
